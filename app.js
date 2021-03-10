@@ -11,7 +11,10 @@ const db_user = process.env.DB_USERNAME;
 const db_password = process.env.DB_PASSWORD;
 const db_name = process.env.DB_NAME;
 const db_url_cloud = `mongodb+srv://${db_user}:${db_password}@cluster0-a0s4s.mongodb.net/${db_name}?retryWrites=true&w=majority`;
-
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
 
 const feedRoutes = require('./routes/feed');
 const authRoutes = require('./routes/auth');
@@ -61,6 +64,9 @@ app.use((error, req, res, next) => {
     const data = error.data;
     res.status(status).json({ message: message, data: data });
 });
+
+
+
 
 mongoose
     .connect(db_url_cloud)
