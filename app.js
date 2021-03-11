@@ -71,8 +71,13 @@ app.use((error, req, res, next) => {
 mongoose
     .connect(db_url_cloud)
     .then(() => {
-        app.listen(8080, () => {
+    const server = app.listen(8080, () => {
             console.log("The REST API is running on port 8080");
+        });
+        // Sokcet.io implementation
+        const io = require('./socket').init(server);
+        io.on('connection', socket => {
+            console.log('Client connected');
         });
     })
     .catch(err => {
