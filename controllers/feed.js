@@ -62,7 +62,7 @@ exports.createPost = async (req, res, next) => {
       await post.save();
       const user = await User.findById(req.userId);
       user.posts.push(post);
-      await user.save();
+      const savedUser = await user.save();
       creator = user;
 
       io.getIO().emit('posts', {
@@ -74,6 +74,7 @@ exports.createPost = async (req, res, next) => {
           post: post,
           creator: { _id: creator._id, name: user.name }
         });
+        return savedUser;
     } catch (err) {
       if (!err.statusCode) {
         err.statusCode = 500;
